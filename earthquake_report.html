@@ -1,1 +1,1049 @@
-<!DOCTYPE html><html>...</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>地震活动监测报告 - 2025-11-13 15:17:20</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+            background: #eceff1;
+            color: #263238;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, #37474f, #263238);
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 3px solid #1565c0;
+        }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .header p {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+        
+        /* 更新时间 */
+        .update-time {
+            background: #fff9c4;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            color: #5d4037;
+            border-bottom: 1px solid #fdd835;
+            font-family: "Courier New", monospace;
+        }
+        
+        /* 提示栏 */
+        .tips-bar {
+            background: #e3f2fd;
+            color: #1565c0;
+            font-size: 11px;
+            text-align: center;
+            padding: 8px;
+            border-bottom: 1px solid #90caf9;
+        }
+        
+        /* 统计卡片 */
+        .stats-container {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+        }
+        .stat-card {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-card.domestic {
+            border-top: 3px solid #1565c0;
+        }
+        .stat-card.international {
+            border-top: 3px solid #00897b;
+        }
+        .stat-card.total {
+            border-top: 3px solid #ef6c00;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .stat-card.domestic .stat-number {
+            color: #1565c0;
+        }
+        .stat-card.international .stat-number {
+            color: #00897b;
+        }
+        .stat-card.total .stat-number {
+            color: #ef6c00;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: #78909c;
+        }
+        
+        /* 区块 */
+        .section-block {
+            margin: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* 区块标题 */
+        .section-header {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            border-left: 4px solid #1565c0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #37474f;
+        }
+        .header-subtitle {
+            font-size: 10px;
+            color: #90a4ae;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+        .header-count {
+            margin-left: auto;
+            font-size: 11px;
+            padding: 2px 8px;
+            border: 1px solid;
+            border-radius: 3px;
+            background: white;
+            font-weight: 600;
+        }
+        
+        /* 表格容器 */
+        .table-container {
+            position: relative;
+        }
+        .table-scroll-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* 表格 */
+        .data-table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+            background: white;
+        }
+        .data-table thead {
+            background: #eceff1;
+            border-bottom: 2px solid #b0bec5;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .data-table th {
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #546e7a;
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: 6px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+        .data-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .data-table tbody tr:hover {
+            background: #e3f2fd;
+            transition: background 0.2s;
+        }
+        .data-table tbody tr.hidden {
+            display: none;
+        }
+        
+        /* 单元格样式 */
+        .cell-mag {
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .cell-lon, .cell-lat, .cell-dep, .cell-time {
+            font-family: "Courier New", monospace;
+            font-size: 11px;
+        }
+        .cell-time {
+            color: #607d8b;
+        }
+        .cell-loc {
+            text-align: left;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #37474f;
+        }
+        
+        /* 分页栏 */
+        .pagination-bar {
+            padding: 12px;
+            text-align: center;
+            background: #f5f5f5;
+            border-top: 1px solid #e0e0e0;
+        }
+        .page-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 2px;
+            border: 1px solid #1565c0;
+            background: white;
+            color: #1565c0;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .page-btn:hover {
+            background: #e3f2fd;
+        }
+        .page-btn.active {
+            background: #1565c0;
+            color: white;
+        }
+        .page-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .page-info {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #78909c;
+        }
+        
+        /* 无数据 */
+        .no-data {
+            padding: 40px;
+            text-align: center;
+            color: #b0bec5;
+            font-size: 13px;
+        }
+        
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #78909c;
+            background: white;
+            margin: 10px;
+            border-radius: 4px;
+        }
+        .footer-divider {
+            margin: 8px 0;
+            opacity: 0.3;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .col-lon, .col-lat {
+                display: none;
+            }
+            .data-table {
+                min-width: 580px;
+            }
+            .page-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+                margin: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🌏 地震活动监测报告</h1>
+            <p>Seismic Activity Monitoring Report</p>
+        </div>
+        
+        <!-- 更新时间 -->
+        <div class="update-time">
+            📡 数据更新时间：2025-11-13 15:17:20
+        </div>
+        
+        <!-- 提示栏 -->
+        <div class="tips-bar">
+            ↔️ 表格可横向滑动查看完整信息 | 📄 点击页码切换浏览
+        </div>
+        
+        <!-- 统计卡片 -->
+        <div class="stats-container">
+            <div class="stat-card domestic">
+                <div class="stat-number">21</div>
+                <div class="stat-label">国内地震</div>
+            </div>
+            <div class="stat-card international">
+                <div class="stat-number">37</div>
+                <div class="stat-label">国际地震</div>
+            </div>
+            <div class="stat-card total">
+                <div class="stat-number">58</div>
+                <div class="stat-label">总计</div>
+            </div>
+        </div>
+        
+        <!-- 国内地震 -->
+        
+        <section class="section-block" id="domestic">
+            <div class="section-header" style="border-left-color:#1565c0;">
+                <span class="header-title">🇨🇳 中国大陆及邻近地区</span>
+                <span class="header-subtitle">CHINA MAINLAND</span>
+                <span class="header-count" style="color:#1565c0;border-color:#1565c0;">n=21</span>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-scroll-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="col-num">#</th>
+                                <th class="col-mag">震级</th>
+                                <th class="col-lon">经度</th>
+                                <th class="col-lat">纬度</th>
+                                <th class="col-dep">深度(km)</th>
+                                <th class="col-loc">地点</th>
+                                <th class="col-time">发生时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domestic_tbody">
+                            
+        <tr class="data-row" data-idx="0">
+            <td class="cell-num">1</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.6</td>
+            <td class="cell-lon">120.62</td>
+            <td class="cell-lat">23.22</td>
+            <td class="cell-dep">12km</td>
+            <td class="cell-loc" title="台湾台南市">台湾台南市</td>
+            <td class="cell-time">2025-11-10 13:00:49</td>
+        </tr>
+        <tr class="data-row" data-idx="1">
+            <td class="cell-num">2</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.2</td>
+            <td class="cell-lon">75.6</td>
+            <td class="cell-lat">38.28</td>
+            <td class="cell-dep">96km</td>
+            <td class="cell-loc" title="新疆克孜勒苏州阿克陶县">新疆克孜勒苏州阿克陶县</td>
+            <td class="cell-time">2025-11-06 09:02:21</td>
+        </tr>
+        <tr class="data-row" data-idx="2">
+            <td class="cell-num">3</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.4</td>
+            <td class="cell-lon">87.4</td>
+            <td class="cell-lat">28.43</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="西藏日喀则市定日县">西藏日喀则市定日县</td>
+            <td class="cell-time">2025-11-04 04:57:21</td>
+        </tr>
+        <tr class="data-row" data-idx="3">
+            <td class="cell-num">4</td>
+            <td class="cell-mag" style="color:#fbc02d;">4</td>
+            <td class="cell-lon">83.48</td>
+            <td class="cell-lat">41.13</td>
+            <td class="cell-dep">13km</td>
+            <td class="cell-loc" title="新疆阿克苏地区沙雅县">新疆阿克苏地区沙雅县</td>
+            <td class="cell-time">2025-10-30 23:40:00</td>
+        </tr>
+        <tr class="data-row" data-idx="4">
+            <td class="cell-num">5</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.7</td>
+            <td class="cell-lon">88.52</td>
+            <td class="cell-lat">41.77</td>
+            <td class="cell-dep">27km</td>
+            <td class="cell-loc" title="新疆吐鲁番市托克逊县">新疆吐鲁番市托克逊县</td>
+            <td class="cell-time">2025-10-27 15:39:21</td>
+        </tr>
+        <tr class="data-row" data-idx="5">
+            <td class="cell-num">6</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.8</td>
+            <td class="cell-lon">123.95</td>
+            <td class="cell-lat">-9.2</td>
+            <td class="cell-dep">80km</td>
+            <td class="cell-loc" title="帝汶岛附近海域">帝汶岛附近海域</td>
+            <td class="cell-time">2025-10-27 01:04:27</td>
+        </tr>
+        <tr class="data-row" data-idx="6">
+            <td class="cell-num">7</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.7</td>
+            <td class="cell-lon">99.65</td>
+            <td class="cell-lat">29.08</td>
+            <td class="cell-dep">15km</td>
+            <td class="cell-loc" title="四川甘孜州乡城县">四川甘孜州乡城县</td>
+            <td class="cell-time">2025-10-26 23:02:56</td>
+        </tr>
+        <tr class="data-row" data-idx="7">
+            <td class="cell-num">8</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.2</td>
+            <td class="cell-lon">88.44</td>
+            <td class="cell-lat">41.71</td>
+            <td class="cell-dep">30km</td>
+            <td class="cell-loc" title="新疆吐鲁番市托克逊县">新疆吐鲁番市托克逊县</td>
+            <td class="cell-time">2025-10-26 12:31:13</td>
+        </tr>
+        <tr class="data-row" data-idx="8">
+            <td class="cell-num">9</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.5</td>
+            <td class="cell-lon">131.1</td>
+            <td class="cell-lat">43.08</td>
+            <td class="cell-dep">560km</td>
+            <td class="cell-loc" title="吉林延边州珲春市">吉林延边州珲春市</td>
+            <td class="cell-time">2025-10-25 19:45:22</td>
+        </tr>
+        <tr class="data-row" data-idx="9">
+            <td class="cell-num">10</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.8</td>
+            <td class="cell-lon">145.8</td>
+            <td class="cell-lat">43</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="日本北海道附近海域">日本北海道附近海域</td>
+            <td class="cell-time">2025-10-25 00:39:59</td>
+        </tr>
+        <tr class="data-row" data-idx="10">
+            <td class="cell-num">11</td>
+            <td class="cell-mag" style="color:#fbc02d;">4</td>
+            <td class="cell-lon">77.39</td>
+            <td class="cell-lat">39.57</td>
+            <td class="cell-dep">40km</td>
+            <td class="cell-loc" title="新疆喀什地区伽师县">新疆喀什地区伽师县</td>
+            <td class="cell-time">2025-10-24 02:19:20</td>
+        </tr>
+        <tr class="data-row" data-idx="11">
+            <td class="cell-num">12</td>
+            <td class="cell-mag" style="color:#fbc02d;">4</td>
+            <td class="cell-lon">120.76</td>
+            <td class="cell-lat">23.9</td>
+            <td class="cell-dep">28km</td>
+            <td class="cell-loc" title="台湾南投县">台湾南投县</td>
+            <td class="cell-time">2025-10-23 20:28:06</td>
+        </tr>
+        <tr class="data-row" data-idx="12">
+            <td class="cell-num">13</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.6</td>
+            <td class="cell-lon">122.11</td>
+            <td class="cell-lat">24.21</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="台湾花莲县海域">台湾花莲县海域</td>
+            <td class="cell-time">2025-10-18 10:04:13</td>
+        </tr>
+        <tr class="data-row" data-idx="13">
+            <td class="cell-num">14</td>
+            <td class="cell-mag" style="color:#fbc02d;">4</td>
+            <td class="cell-lon">81.29</td>
+            <td class="cell-lat">41.81</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="新疆阿克苏地区拜城县">新疆阿克苏地区拜城县</td>
+            <td class="cell-time">2025-10-14 11:15:28</td>
+        </tr>
+        <tr class="data-row" data-idx="14">
+            <td class="cell-num">15</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.7</td>
+            <td class="cell-lon">103.09</td>
+            <td class="cell-lat">30.48</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="四川雅安市芦山县">四川雅安市芦山县</td>
+            <td class="cell-time">2025-10-12 15:21:43</td>
+        </tr>
+        <tr class="data-row" data-idx="15">
+            <td class="cell-num">16</td>
+            <td class="cell-mag" style="color:#fbc02d;">4</td>
+            <td class="cell-lon">83.39</td>
+            <td class="cell-lat">41.17</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="新疆阿克苏地区库车市">新疆阿克苏地区库车市</td>
+            <td class="cell-time">2025-10-12 11:57:54</td>
+        </tr>
+        <tr class="data-row" data-idx="16">
+            <td class="cell-num">17</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.8</td>
+            <td class="cell-lon">103.46</td>
+            <td class="cell-lat">27.03</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="云南昭通市鲁甸县">云南昭通市鲁甸县</td>
+            <td class="cell-time">2025-10-11 11:18:13</td>
+        </tr>
+        <tr class="data-row" data-idx="17">
+            <td class="cell-num">18</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.4</td>
+            <td class="cell-lon">103.44</td>
+            <td class="cell-lat">27</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="云南昭通市鲁甸县">云南昭通市鲁甸县</td>
+            <td class="cell-time">2025-10-10 21:21:11</td>
+        </tr>
+        <tr class="data-row" data-idx="18">
+            <td class="cell-num">19</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.4</td>
+            <td class="cell-lon">99.86</td>
+            <td class="cell-lat">30.84</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="四川甘孜州新龙县">四川甘孜州新龙县</td>
+            <td class="cell-time">2025-10-09 13:17:38</td>
+        </tr>
+        <tr class="data-row" data-idx="19">
+            <td class="cell-num">20</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.1</td>
+            <td class="cell-lon">122.11</td>
+            <td class="cell-lat">23.47</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="台湾花莲县海域">台湾花莲县海域</td>
+            <td class="cell-time">2025-10-08 11:33:52</td>
+        </tr>
+        <tr class="data-row" data-idx="20">
+            <td class="cell-num">21</td>
+            <td class="cell-mag" style="color:#fbc02d;">4.5</td>
+            <td class="cell-lon">121.59</td>
+            <td class="cell-lat">23.97</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="台湾花莲县">台湾花莲县</td>
+            <td class="cell-time">2025-10-08 07:52:13</td>
+        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="pagination-bar" id="domestic_pagination"></div>
+        </section>
+        
+        <!-- 国际地震 -->
+        
+        <section class="section-block" id="international">
+            <div class="section-header" style="border-left-color:#00897b;">
+                <span class="header-title">🌍 全球其他地区</span>
+                <span class="header-subtitle">GLOBAL</span>
+                <span class="header-count" style="color:#00897b;border-color:#00897b;">n=37</span>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-scroll-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="col-num">#</th>
+                                <th class="col-mag">震级</th>
+                                <th class="col-lon">经度</th>
+                                <th class="col-lat">纬度</th>
+                                <th class="col-dep">深度(km)</th>
+                                <th class="col-loc">地点</th>
+                                <th class="col-time">发生时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="international_tbody">
+                            
+        <tr class="data-row" data-idx="0">
+            <td class="cell-num">1</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.4</td>
+            <td class="cell-lon">32.45</td>
+            <td class="cell-lat">34.65</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="地中海东部">地中海东部</td>
+            <td class="cell-time">2025-11-12 22:23:30</td>
+        </tr>
+        <tr class="data-row" data-idx="1">
+            <td class="cell-num">2</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.5</td>
+            <td class="cell-lon">7.05</td>
+            <td class="cell-lat">73.35</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="挪威海">挪威海</td>
+            <td class="cell-time">2025-11-12 14:03:29</td>
+        </tr>
+        <tr class="data-row" data-idx="2">
+            <td class="cell-num">3</td>
+            <td class="cell-mag" style="color:#c62828;">6.3</td>
+            <td class="cell-lon">143.5</td>
+            <td class="cell-lat">39.65</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-10 15:23:16</td>
+        </tr>
+        <tr class="data-row" data-idx="3">
+            <td class="cell-num">4</td>
+            <td class="cell-mag" style="color:#c62828;">6.4</td>
+            <td class="cell-lon">143.75</td>
+            <td class="cell-lat">39.35</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-09 16:54:35</td>
+        </tr>
+        <tr class="data-row" data-idx="4">
+            <td class="cell-num">5</td>
+            <td class="cell-mag" style="color:#c62828;">6.8</td>
+            <td class="cell-lon">143.75</td>
+            <td class="cell-lat">39.45</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-09 16:03:35</td>
+        </tr>
+        <tr class="data-row" data-idx="5">
+            <td class="cell-num">6</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.5</td>
+            <td class="cell-lon">143.45</td>
+            <td class="cell-lat">39.5</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-09 06:15:07</td>
+        </tr>
+        <tr class="data-row" data-idx="6">
+            <td class="cell-num">7</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.1</td>
+            <td class="cell-lon">143.55</td>
+            <td class="cell-lat">39.3</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-09 05:04:19</td>
+        </tr>
+        <tr class="data-row" data-idx="7">
+            <td class="cell-num">8</td>
+            <td class="cell-mag" style="color:#ef6c00;">5</td>
+            <td class="cell-lon">143.65</td>
+            <td class="cell-lat">39.35</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="日本本州东部远海">日本本州东部远海</td>
+            <td class="cell-time">2025-11-09 04:29:13</td>
+        </tr>
+        <tr class="data-row" data-idx="8">
+            <td class="cell-num">9</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.9</td>
+            <td class="cell-lon">123.15</td>
+            <td class="cell-lat">-0.1</td>
+            <td class="cell-dep">110km</td>
+            <td class="cell-loc" title="印尼托米尼湾">印尼托米尼湾</td>
+            <td class="cell-time">2025-11-05 07:32:23</td>
+        </tr>
+        <tr class="data-row" data-idx="9">
+            <td class="cell-num">10</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.9</td>
+            <td class="cell-lon">160</td>
+            <td class="cell-lat">52</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="堪察加东岸远海">堪察加东岸远海</td>
+            <td class="cell-time">2025-11-05 07:28:58</td>
+        </tr>
+        <tr class="data-row" data-idx="10">
+            <td class="cell-num">11</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.7</td>
+            <td class="cell-lon">160.05</td>
+            <td class="cell-lat">52.3</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="堪察加东岸远海">堪察加东岸远海</td>
+            <td class="cell-time">2025-11-04 12:45:31</td>
+        </tr>
+        <tr class="data-row" data-idx="11">
+            <td class="cell-num">12</td>
+            <td class="cell-mag" style="color:#c62828;">6</td>
+            <td class="cell-lon">160.2</td>
+            <td class="cell-lat">52.1</td>
+            <td class="cell-dep">30km</td>
+            <td class="cell-loc" title="堪察加东岸远海">堪察加东岸远海</td>
+            <td class="cell-time">2025-11-04 11:45:08</td>
+        </tr>
+        <tr class="data-row" data-idx="12">
+            <td class="cell-num">13</td>
+            <td class="cell-mag" style="color:#c62828;">6.3</td>
+            <td class="cell-lon">160.25</td>
+            <td class="cell-lat">52.3</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="堪察加东岸远海">堪察加东岸远海</td>
+            <td class="cell-time">2025-11-03 16:44:42</td>
+        </tr>
+        <tr class="data-row" data-idx="13">
+            <td class="cell-num">14</td>
+            <td class="cell-mag" style="color:#c62828;">6.1</td>
+            <td class="cell-lon">160.2</td>
+            <td class="cell-lat">52.35</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="堪察加东岸远海">堪察加东岸远海</td>
+            <td class="cell-time">2025-11-03 15:10:25</td>
+        </tr>
+        <tr class="data-row" data-idx="14">
+            <td class="cell-num">15</td>
+            <td class="cell-mag" style="color:#c62828;">6.4</td>
+            <td class="cell-lon">67.45</td>
+            <td class="cell-lat">36.55</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="阿富汗">阿富汗</td>
+            <td class="cell-time">2025-11-03 04:29:00</td>
+        </tr>
+        <tr class="data-row" data-idx="15">
+            <td class="cell-num">16</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.5</td>
+            <td class="cell-lon">122.85</td>
+            <td class="cell-lat">9.75</td>
+            <td class="cell-dep">120km</td>
+            <td class="cell-loc" title="菲律宾">菲律宾</td>
+            <td class="cell-time">2025-11-03 03:06:54</td>
+        </tr>
+        <tr class="data-row" data-idx="16">
+            <td class="cell-num">17</td>
+            <td class="cell-mag" style="color:#c62828;">6</td>
+            <td class="cell-lon">97</td>
+            <td class="cell-lat">-45.15</td>
+            <td class="cell-dep">30km</td>
+            <td class="cell-loc" title="东南印度洋海岭">东南印度洋海岭</td>
+            <td class="cell-time">2025-11-01 04:53:25</td>
+        </tr>
+        <tr class="data-row" data-idx="17">
+            <td class="cell-num">18</td>
+            <td class="cell-mag" style="color:#c62828;">6.4</td>
+            <td class="cell-lon">130.05</td>
+            <td class="cell-lat">-6.65</td>
+            <td class="cell-dep">150km</td>
+            <td class="cell-loc" title="印尼班达海">印尼班达海</td>
+            <td class="cell-time">2025-10-28 22:40:16</td>
+        </tr>
+        <tr class="data-row" data-idx="18">
+            <td class="cell-num">19</td>
+            <td class="cell-mag" style="color:#c62828;">6.1</td>
+            <td class="cell-lon">28.2</td>
+            <td class="cell-lat">39.15</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="土耳其">土耳其</td>
+            <td class="cell-time">2025-10-28 03:48:29</td>
+        </tr>
+        <tr class="data-row" data-idx="19">
+            <td class="cell-num">20</td>
+            <td class="cell-mag" style="color:#c62828;">6.5</td>
+            <td class="cell-lon">-59.5</td>
+            <td class="cell-lat">16.4</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="背风群岛">背风群岛</td>
+            <td class="cell-time">2025-10-27 20:38:39</td>
+        </tr>
+        <tr class="data-row" data-idx="20">
+            <td class="cell-num">21</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.9</td>
+            <td class="cell-lon">166.45</td>
+            <td class="cell-lat">-12.4</td>
+            <td class="cell-dep">60km</td>
+            <td class="cell-loc" title="所罗门群岛">所罗门群岛</td>
+            <td class="cell-time">2025-10-26 07:28:04</td>
+        </tr>
+        <tr class="data-row" data-idx="21">
+            <td class="cell-num">22</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.5</td>
+            <td class="cell-lon">-84.4</td>
+            <td class="cell-lat">9.25</td>
+            <td class="cell-dep">30km</td>
+            <td class="cell-loc" title="哥斯达黎加沿岸远海">哥斯达黎加沿岸远海</td>
+            <td class="cell-time">2025-10-22 11:57:06</td>
+        </tr>
+        <tr class="data-row" data-idx="22">
+            <td class="cell-num">23</td>
+            <td class="cell-mag" style="color:#ef6c00;">5</td>
+            <td class="cell-lon">-79.75</td>
+            <td class="cell-lat">-3.65</td>
+            <td class="cell-dep">30km</td>
+            <td class="cell-loc" title="厄瓜多尔">厄瓜多尔</td>
+            <td class="cell-time">2025-10-22 08:05:40</td>
+        </tr>
+        <tr class="data-row" data-idx="23">
+            <td class="cell-num">24</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.1</td>
+            <td class="cell-lon">71.1</td>
+            <td class="cell-lat">36.55</td>
+            <td class="cell-dep">240km</td>
+            <td class="cell-loc" title="阿富汗">阿富汗</td>
+            <td class="cell-time">2025-10-22 02:14:48</td>
+        </tr>
+        <tr class="data-row" data-idx="24">
+            <td class="cell-num">25</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.3</td>
+            <td class="cell-lon">72.85</td>
+            <td class="cell-lat">36.7</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="巴基斯坦">巴基斯坦</td>
+            <td class="cell-time">2025-10-17 20:15:08</td>
+        </tr>
+        <tr class="data-row" data-idx="25">
+            <td class="cell-num">26</td>
+            <td class="cell-mag" style="color:#c62828;">6</td>
+            <td class="cell-lon">126.25</td>
+            <td class="cell-lat">9.85</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="菲律宾群岛地区">菲律宾群岛地区</td>
+            <td class="cell-time">2025-10-17 07:03:11</td>
+        </tr>
+        <tr class="data-row" data-idx="26">
+            <td class="cell-num">27</td>
+            <td class="cell-mag" style="color:#c62828;">6.5</td>
+            <td class="cell-lon">138.85</td>
+            <td class="cell-lat">-2.05</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="印尼巴布亚省">印尼巴布亚省</td>
+            <td class="cell-time">2025-10-16 13:48:52</td>
+        </tr>
+        <tr class="data-row" data-idx="27">
+            <td class="cell-num">28</td>
+            <td class="cell-mag" style="color:#c62828;">6.1</td>
+            <td class="cell-lon">-61.5</td>
+            <td class="cell-lat">-59.95</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="德雷克海峡">德雷克海峡</td>
+            <td class="cell-time">2025-10-16 09:42:33</td>
+        </tr>
+        <tr class="data-row" data-idx="28">
+            <td class="cell-num">29</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.7</td>
+            <td class="cell-lon">141.65</td>
+            <td class="cell-lat">7.35</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="加罗林群岛">加罗林群岛</td>
+            <td class="cell-time">2025-10-13 19:11:01</td>
+        </tr>
+        <tr class="data-row" data-idx="29">
+            <td class="cell-num">30</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.7</td>
+            <td class="cell-lon">124</td>
+            <td class="cell-lat">10.95</td>
+            <td class="cell-dep">20km</td>
+            <td class="cell-loc" title="菲律宾">菲律宾</td>
+            <td class="cell-time">2025-10-13 01:06:02</td>
+        </tr>
+        <tr class="data-row" data-idx="30">
+            <td class="cell-num">31</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.4</td>
+            <td class="cell-lon">40</td>
+            <td class="cell-lat">13.8</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="埃塞俄比亚">埃塞俄比亚</td>
+            <td class="cell-time">2025-10-12 00:18:24</td>
+        </tr>
+        <tr class="data-row" data-idx="31">
+            <td class="cell-num">32</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.2</td>
+            <td class="cell-lon">39.85</td>
+            <td class="cell-lat">13.85</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="埃塞俄比亚">埃塞俄比亚</td>
+            <td class="cell-time">2025-10-12 00:01:57</td>
+        </tr>
+        <tr class="data-row" data-idx="32">
+            <td class="cell-num">33</td>
+            <td class="cell-mag" style="color:#ef6c00;">5.8</td>
+            <td class="cell-lon">126.55</td>
+            <td class="cell-lat">9.05</td>
+            <td class="cell-dep">50km</td>
+            <td class="cell-loc" title="菲律宾群岛地区">菲律宾群岛地区</td>
+            <td class="cell-time">2025-10-11 22:32:56</td>
+        </tr>
+        <tr class="data-row" data-idx="33">
+            <td class="cell-num">34</td>
+            <td class="cell-mag" style="color:#8b0000;">7.6</td>
+            <td class="cell-lon">-62.05</td>
+            <td class="cell-lat">-60.25</td>
+            <td class="cell-dep">10km</td>
+            <td class="cell-loc" title="德雷克海峡">德雷克海峡</td>
+            <td class="cell-time">2025-10-11 04:29:21</td>
+        </tr>
+        <tr class="data-row" data-idx="34">
+            <td class="cell-num">35</td>
+            <td class="cell-mag" style="color:#c62828;">6.7</td>
+            <td class="cell-lon">126.75</td>
+            <td class="cell-lat">7.3</td>
+            <td class="cell-dep">50km</td>
+            <td class="cell-loc" title="菲律宾群岛地区">菲律宾群岛地区</td>
+            <td class="cell-time">2025-10-10 19:12:05</td>
+        </tr>
+        <tr class="data-row" data-idx="35">
+            <td class="cell-num">36</td>
+            <td class="cell-mag" style="color:#8b0000;">7.4</td>
+            <td class="cell-lon">127</td>
+            <td class="cell-lat">7.55</td>
+            <td class="cell-dep">50km</td>
+            <td class="cell-loc" title="菲律宾群岛地区">菲律宾群岛地区</td>
+            <td class="cell-time">2025-10-10 09:43:55</td>
+        </tr>
+        <tr class="data-row" data-idx="36">
+            <td class="cell-num">37</td>
+            <td class="cell-mag" style="color:#c62828;">6.6</td>
+            <td class="cell-lon">146.8</td>
+            <td class="cell-lat">-6.75</td>
+            <td class="cell-dep">100km</td>
+            <td class="cell-loc" title="巴布亚新几内亚">巴布亚新几内亚</td>
+            <td class="cell-time">2025-10-07 19:05:16</td>
+        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="pagination-bar" id="international_pagination"></div>
+        </section>
+        
+        <!-- 页脚 -->
+        <div class="footer">
+            <div class="footer-divider">━━━━━━━━━━━━━━━━━━━━</div>
+            <div>数据来源：中国地震台网 CENC</div>
+            <div style="margin-top:4px;opacity:0.7;">更新时间：2025-11-13 15:17:20</div>
+        </div>
+    </div>
+    
+    <script>
+        // 分页管理器
+        class Pagination {
+            constructor(sectionId, pageSize = 20) {
+                this.sectionId = sectionId;
+                this.pageSize = pageSize;
+                this.currentPage = 1;
+                this.tbody = document.getElementById(sectionId + '_tbody');
+                this.paginationBar = document.getElementById(sectionId + '_pagination');
+                this.rows = Array.from(this.tbody.querySelectorAll('tr'));
+                this.totalPages = Math.ceil(this.rows.length / this.pageSize);
+                
+                this.init();
+            }
+            
+            init() {
+                if (this.totalPages <= 1) {
+                    this.paginationBar.style.display = 'none';
+                    return;
+                }
+                this.renderPagination();
+                this.showPage(1);
+            }
+            
+            renderPagination() {
+                let html = '';
+                
+                // 上一页
+                html += '<span class="page-btn" data-action="prev">← 上一页</span>';
+                
+                // 页码
+                for (let i = 1; i <= this.totalPages; i++) {
+                    if (
+                        i === 1 || 
+                        i === this.totalPages || 
+                        (i >= this.currentPage - 2 && i <= this.currentPage + 2)
+                    ) {
+                        html += `<span class="page-btn page-num" data-page="${i}">${i}</span>`;
+                    } else if (i === this.currentPage - 3 || i === this.currentPage + 3) {
+                        html += '<span style="padding:0 5px;color:#ccc;">...</span>';
+                    }
+                }
+                
+                // 下一页
+                html += '<span class="page-btn" data-action="next">下一页 →</span>';
+                
+                // 页码信息
+                html += `<div class="page-info">共 ${this.rows.length} 条记录，${this.totalPages} 页</div>`;
+                
+                this.paginationBar.innerHTML = html;
+                
+                // 绑定事件
+                this.paginationBar.querySelectorAll('.page-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = e.target.dataset.action;
+                        const page = parseInt(e.target.dataset.page);
+                        
+                        if (action === 'prev' && this.currentPage > 1) {
+                            this.showPage(this.currentPage - 1);
+                        } else if (action === 'next' && this.currentPage < this.totalPages) {
+                            this.showPage(this.currentPage + 1);
+                        } else if (page) {
+                            this.showPage(page);
+                        }
+                    });
+                });
+            }
+            
+            showPage(page) {
+                this.currentPage = page;
+                const start = (page - 1) * this.pageSize;
+                const end = start + this.pageSize;
+                
+                // 隐藏所有行
+                this.rows.forEach((row, idx) => {
+                    if (idx >= start && idx < end) {
+                        row.classList.remove('hidden');
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                });
+                
+                // 更新按钮状态
+                this.updateButtonStates();
+                
+                // 滚动到顶部
+                document.getElementById(this.sectionId).scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+            
+            updateButtonStates() {
+                this.renderPagination();
+                
+                // 高亮当前页
+                const currentBtn = this.paginationBar.querySelector(`.page-num[data-page="${this.currentPage}"]`);
+                if (currentBtn) {
+                    currentBtn.classList.add('active');
+                }
+                
+                // 禁用上下页按钮
+                const prevBtn = this.paginationBar.querySelector('[data-action="prev"]');
+                const nextBtn = this.paginationBar.querySelector('[data-action="next"]');
+                
+                if (this.currentPage === 1) {
+                    prevBtn.classList.add('disabled');
+                }
+                if (this.currentPage === this.totalPages) {
+                    nextBtn.classList.add('disabled');
+                }
+            }
+        }
+        
+        // 初始化分页
+        document.addEventListener('DOMContentLoaded', () => {
+            new Pagination('domestic');
+            new Pagination('international');
+        });
+    </script>
+</body>
+</html>
