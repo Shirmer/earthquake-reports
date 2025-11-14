@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>地震活动监测报告 - 2025-11-14 22:29:33</title>
+<title>地震活动监测报告 - 2025-11-14 22:36:29</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:#eceff1;color:#263238;line-height:1.5; }
@@ -28,30 +28,40 @@ body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaH
 .header-title { font-size:14px;font-weight:600;color:#37474f; }
 .header-subtitle { font-size:10px;color:#90a4ae;margin-left:8px; }
 .header-count { margin-left:auto;font-size:11px;padding:2px 8px;border:1px solid;border-radius:3px;background:white;font-weight:600; }
-/* ✅ 横向滑动容器增强 */
-.table-container { position:relative; }
-.table-scroll-wrapper {
+/* ✅ 横向滚动增强：移动端彻底可滑动 */
+.table-container {
     width:100%;
-    overflow-x:auto;
-    overflow-y:hidden;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:thin;
-    scrollbar-color:#90caf9 transparent;
+    overflow:hidden;
     position:relative;
 }
-.table-scroll-wrapper::-webkit-scrollbar { height:6px; }
-.table-scroll-wrapper::-webkit-scrollbar-thumb { background:#90caf9;border-radius:3px; }
-.table-scroll-wrapper::-webkit-scrollbar-track { background:transparent; }
+.table-scroll-wrapper {
+    width:100%;
+    overflow-x:scroll;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    display:block;
+    position:relative;
+}
+.table-scroll-wrapper>table {
+    width:900px;
+    min-width:900px;
+    max-width:none;
+}
+.table-scroll-wrapper::-webkit-scrollbar{height:6px;}
+.table-scroll-wrapper::-webkit-scrollbar-thumb{background-color:#90caf9;border-radius:3px;}
+.table-scroll-wrapper::-webkit-scrollbar-track{background:transparent;}
 @media(max-width:600px){
     .table-scroll-wrapper::after{
-        content:"↔ 左右滑动查看全部列";
-        position:absolute;right:10px;bottom:6px;
-        background:rgba(21,101,192,0.85);color:white;font-size:10px;padding:2px 6px;
-        border-radius:4px;animation:fadeout 4s forwards;
+        content:"↔ 左右滑动查看完整列";
+        position:absolute;right:10px;bottom:8px;
+        background:rgba(21,101,192,0.9);
+        color:white;font-size:10px;
+        padding:2px 6px;border-radius:3px;
+        z-index:2;animation:tipfade 5s forwards;
     }
-    @keyframes fadeout{0%{opacity:1;}80%{opacity:1;}100%{opacity:0;display:none;}}
+    @keyframes tipfade{0%,80%{opacity:1;}100%{opacity:0;display:none;}}
 }
-.data-table { width:100%;min-width:750px;border-collapse:collapse;background:white;table-layout:fixed; }
+.data-table { border-collapse:collapse;background:white;table-layout:fixed; }
 .data-table th,.data-table td { font-family:"Courier New",monospace;white-space:nowrap;text-align:center;padding:6px; }
 .data-table thead { background:#eceff1;border-bottom:2px solid #b0bec5;position:sticky;top:0; }
 .data-table th { font-size:11px;font-weight:600;color:#546e7a; }
@@ -65,13 +75,12 @@ body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaH
 .page-btn.disabled{opacity:0.4;cursor:not-allowed;}
 .footer{text-align:center;padding:15px;font-size:11px;color:#78909c;background:white;margin:10px;border-radius:4px;}
 .footer-divider{margin:8px 0;opacity:0.3;}
-@media(max-width:600px){.col-lon,.col-lat{display:none;}.col-loc{width:45%;}.col-mag,.col-dep,.col-time{width:18%;}.data-table{min-width:580px;}}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header"><h1>🌏 地震活动监测报告</h1><p>Seismic Activity Monitoring Report</p></div>
-  <div class="update-time">📡 数据更新时间：2025-11-14 22:29:33</div>
+  <div class="update-time">📡 数据更新时间：2025-11-14 22:36:29</div>
   <div class="tips-bar">↔️ 表格可横向滑动查看完整信息 | 📄 点击页码切换浏览</div>
   <div class="stats-container">
     <div class="stat-card domestic"><div class="stat-number">21</div><div class="stat-label">国内地震</div></div>
@@ -658,7 +667,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaH
             </div>
             <div class="pagination-bar" id="international_pagination"></div>
         </section>
-  <div class="footer"><div class="footer-divider">━━━━━━━━━━━━━━━━━━━━</div><div>数据来源：中国地震台网 CENC</div><div style="margin-top:4px;opacity:0.7;">更新时间：2025-11-14 22:29:33</div></div>
+  <div class="footer"><div class="footer-divider">━━━━━━━━━━━━━━━━━━━━</div><div>数据来源：中国地震台网 CENC</div><div style="margin-top:4px;opacity:0.7;">更新时间：2025-11-14 22:36:29</div></div>
 </div>
 <script>
 class Pagination {
